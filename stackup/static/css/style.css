@@ -52,17 +52,18 @@ html {
 
 /*salary.html */
 #map-canvas { 
-    height: 100% 
+    height: 100%;
 }
 
 #map-container {
-    height: 95% 
+    height: 95%;
+    position: relative;
 }
 
 #info {
     position:absolute;
     top:50px;
-    right:325px;
+    right: 0px;
     z-index:1;
     color:red;
     background-color:rgba(255,0,0,0.5);
