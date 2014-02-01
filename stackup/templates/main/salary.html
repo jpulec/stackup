@@ -30,6 +30,10 @@
 {% block body %}
     <div id="map-container">
         <div id="map-canvas">
+		<div id="">
+		<span id="latspan"></span>
+		<span id="lngspan"></span>
+		</div>
         </div>
     </div>
 {% endblock body %}
@@ -41,15 +45,16 @@
 var initialLocation;
 
 function initialize() {
-    var mapOptions = {
-    center: new google.maps.LatLng(37.773021, -122.418965),
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
+  var opts = {'center': new google.maps.LatLng(26.12295, -80.17122),
+    'zoom':11, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
+    var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
+    google.maps.event.addListener(map,'click',function(event) {
+       console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
+    google.maps.event.addListener(map,'mousemove',function(event) {
+	console.log("Lng: " + event.latLng.lng());
+	console.log("Lat: " + event.latLng.lat());
+    });
 }
-
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {% endblock %}
