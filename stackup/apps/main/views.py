@@ -1,9 +1,11 @@
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from stackup.apps.main.forms import SalaryForm
+from stackup.apps.main.models import Region
 
 class Home(FormView):
     template_name = "main/home.html"
@@ -12,7 +14,9 @@ class Home(FormView):
 class About(TemplateView):
     template_name = "main/about.html"
 
-class Salary(TemplateView):
+class Salary(ListView):
+    model = Region
+    context_object_name = "regions"
     template_name = "main/salary.html"
 
     def get(self, request, *args, **kwargs):
