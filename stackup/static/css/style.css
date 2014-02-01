@@ -32,6 +32,15 @@ html {
     height: 100%
 }
 
+/*home.html */
+.modal-content {
+    margin-top: 30%;
+}
+.modal-title {
+    font-size: 22pt;
+    text-align: center;
+}
+
 /*salary.html */
 #map-canvas { 
     height: 100% 
