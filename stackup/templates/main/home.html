@@ -2,10 +2,28 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class="modal">
-    <form>
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-primary">Go!</input>
-    </form>
-</div>
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">StackUp</h4>
+            </div>
+            <div class="modal-body">
+                <form method="get" action="{% url "salary" %}">
+                    {{ form.as_p }}
+                    <input type="submit" class="btn btn-primary"></input>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endblock %}
+
+{% block script %}
+<script>
+$(".modal").modal({
+        keyboard: false,
+        show: true,
+        });
+</script>
 {% endblock %}
