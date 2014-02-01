@@ -51,7 +51,7 @@
 
 {% block script %}
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtjo0LUoozL6LlvBy8lp-Gp7PElI4T_1M&sensor=true"></script>
-
+<script type="text/javascript" src="{{ STATIC_URL }}js/fuzzyset.js"></script>
 <script type="text/javascript">
 function GetUrlValue(VarSearch){
     var SearchString = window.location.search.substring(1);
@@ -67,11 +67,21 @@ function GetUrlValue(VarSearch){
 var initialLocation;
 
 function initialize() {
-  var opts = {'center': new google.maps.LatLng(37.774514, -122.433414),
-    'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
+    var region_array = {};
+    var fuzzy_strings = [];
+    {% for region in regions %}
+    region_array["{{ region.name }}"] = "{{ region }}";
+    fuzzy_strings.push({{ region.name }});
+    {% endfor %}
+    fuzzy = FuzzySet(fuzzy_strings);
+
+
+    var opts = {'center': new google.maps.LatLng(37.774514, -122.433414),
+        'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
 
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
     google.maps.event.addListener(map,'click',function(event) {
+<<<<<<< HEAD
        console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
     google.maps.event.addListener(map,'mousemove',function(event) {
 	var lat = event.latLng.lat();
@@ -88,6 +98,35 @@ function initialize() {
         success: jsonParser
     });
     });
+=======
+            console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
+        google.maps.event.addListener(map,'mousemove',function(event) {
+                matches = fuzzy.get("neighborhood");
+                document.getElementById('latspan').innerHTML = event.latLng.lat()
+                document.getElementById('lngspan').innerHTML = event.latLng.lng()
+
+                console.log("Lng: " + event.latLng.lng());
+                console.log("Lat: " + event.latLng.lat());
+
+                $.ajax({
+                    // set up an ajax post request
+url: '/salary/',
+type: 'POST',
+data: { salary: GetUrlValue('salary'), lat: event.latLng.lat(), lng: event.latLng.lng() },
+
+success: function (response) {
+document.getElementById('locName').innerHTML = response[0].locName;
+document.getElementById('rating').innerHTML = response[0].rating;
+document.getElementById('avgRent').innerHTML = response[0].avgRent;
+document.getElementById('walkScore').innerHTML = response[0].walkScore;
+
+},
+error: function(){
+console.log('There was an error loading the data.');
+}           
+});
+});
+>>>>>>> eeac77434ed6899aa683e9b2f36e1e560f337ca7
 }
 
 function jsonParser(json) {
