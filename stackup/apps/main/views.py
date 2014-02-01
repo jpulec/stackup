@@ -16,7 +16,7 @@ class About(TemplateView):
     template_name = "main/about.html"
 
 class Salary(ListView):
-    context_object_name = "regions"
+    context_object_name = "standards"
     template_name = "main/salary.html"
 
     def get(self, request, *args, **kwargs):

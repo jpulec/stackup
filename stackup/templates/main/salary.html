@@ -69,9 +69,12 @@ var initialLocation;
 function initialize() {
     var region_array = {};
     var fuzzy_strings = [];
-    {% for region in regions %}
-    region_array["{{ region.name }}"] = "{{ region }}";
-    fuzzy_strings.push({{ region.name }});
+    {% for standard in standards %}
+    region_array["{{ standard.region.name }}"] = {
+        'star_level':'{{ standard.star_level }}',
+        'threshold': '{{ standard.threshold }}'
+    };
+    fuzzy_strings.push("{{ standard.region.name }}");
     {% endfor %}
     fuzzy = FuzzySet(fuzzy_strings);
 
@@ -83,10 +86,11 @@ function initialize() {
     google.maps.event.addListener(map,'click',function(event) {
             console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
         google.maps.event.addListener(map,'mousemove',function(event) {
-                matches = fuzzy.get("neighborhood");
                 document.getElementById('latspan').innerHTML = event.latLng.lat()
                 document.getElementById('lngspan').innerHTML = event.latLng.lng()
 
+                var neighborhood;
+                matches = fuzzy.get(neighborhood);
                 console.log("Lng: " + event.latLng.lng());
                 console.log("Lat: " + event.latLng.lat());
 
