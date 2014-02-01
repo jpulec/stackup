@@ -71,6 +71,8 @@ function initialize() {
     var fuzzy_strings = [];
     {% for standard in standards %}
     region_array["{{ standard.region.name }}"] = {
+        'name': '{{ standard.region.name }}',
+        'avg_rent': '{{ standard.region.cl_rent }}',
         'star_level':'{{ standard.star_level }}',
         'threshold': '{{ standard.threshold }}'
     };
@@ -94,7 +96,8 @@ function initialize() {
                     dataType: "json",
                     success: function(json) {
                         matches = fuzzy.get(json.results[0].address_components[2].long_name);
-                        console.log(region_array[matches[0][1]]);
+                        $('#avgRent').text(region_array[matches[0][1]]['avg_rent']);
+                        $('#rating').text(region_array[matches[0][1]]['star_level']);
                     }
                 });
         });
