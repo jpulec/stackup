@@ -69,13 +69,20 @@ html {
 
 #info {
     position:absolute;
-    width: 250px;
+    font-family: Trebuchet MS;
+    font-size: 12pt;
+    width: 300px;
+    height: 250px;
     top:50px;
     right: 0px;
     z-index:1;
     color:black;
     box-shadow: 0px 10px 5px #888888;
-    background-color:rgba(255,0,0,0.5);
+    background-color:rgba(194,194,194,0.8);
+}
+
+#info-header {
+    font-size: 16pt;
 }
 
 .star {

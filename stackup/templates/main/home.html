@@ -32,8 +32,8 @@ $(".modal").modal({
         
 function validateForm() {
     var x=document.forms["submit_form"]["id_salary"].value;
-    if (!isNumber(x)) {
-        alert("Please enter a numerical salary");
+    if (!isNumber(x) || x < 0) {
+        alert("Please enter a valid numerical salary");
         $('#id_salary').val("");
         return false;
     }
