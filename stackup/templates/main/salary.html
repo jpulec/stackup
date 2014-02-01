@@ -32,20 +32,20 @@
 
 {% block body %}
     <div id="map-container">
-	<div id="info">
-		<span id="rating">Standard of Living:
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="1Star" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="2Star" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="3Star" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="4Star" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="5Star" class="star"/>
-		</span>
-		<br />
-		<span id="locName"></span>
-		<br />
-		<span id="avgRent"></span>
-		<br />
-		<span id="walkScore"></span>
+        <div id="info">
+            <span id="rating">Standard of Living:
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="1Star" class="star" />
+                <img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="2Star" class="star" />
+                <img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="3Star" class="star" />
+                <img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="4Star" class="star" />
+                <img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="5Star" class="star" />
+            </span>
+            <br />
+            <span id="locName"></span>
+            <br />
+            <span id="avgRent"></span>
+            <br />
+            <span id="walkScore"></span>
         </div>
         <div id="map-canvas"></div>
     </div>
@@ -55,97 +55,98 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtjo0LUoozL6LlvBy8lp-Gp7PElI4T_1M&sensor=true"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/fuzzyset.js"></script>
 <script type="text/javascript">
-var initialLocation;
+    var initialLocation;
 
-function initialize() {
-    var region_array = {};
-    var fuzzy_strings = [];
-    {% for standard in standards %}
-    region_array["{{ standard.region.name }}"] = {
-        'name': '{{ standard.region.name }}',
-        'avg_rent': '{{ standard.region.cl_rent }}',
-        'star_level':'{{ standard.star_level }}',
-        'threshold': '{{ standard.threshold }}'
-    };
-    fuzzy_strings.push("{{ standard.region.name }}");
-    {% endfor %}
-    fuzzy = FuzzySet(fuzzy_strings);
+    function initialize() {
+        var region_array = {};
+        var fuzzy_strings = [];
+        {% for standard in standards %}
+        region_array["{{ standard.region.name }}"] = {
+            'name': '{{ standard.region.name }}',
+            'avg_rent': '{{ standard.region.cl_rent }}',
+            'star_level':'{{ standard.star_level }}',
+            'threshold': '{{ standard.threshold }}'
+        };
+        fuzzy_strings.push("{{ standard.region.name }}");
+        {% endfor %}
+        fuzzy = FuzzySet(fuzzy_strings);
 
-    var minZoom = 12;
-    var moveEvents = 0;
+        var minZoom = 12;  //minimum zoom level
+        var moveEvents = 0; //counter for mouse events
 
-    var strictBounds = new google.maps.LatLngBounds(
-     new google.maps.LatLng(37.69, -122.545),
-     new google.maps.LatLng(37.80, -122.38) 
-    );
+        //var for limiting the area of the map
+        var strictBounds = new google.maps.LatLngBounds(
+         new google.maps.LatLng(37.69, -122.545),
+         new google.maps.LatLng(37.80, -122.38) 
+        );
+	
+        //initial map options
+        var opts = {'center': new google.maps.LatLng(37.774514, -122.433414),
+            'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
 
-    var opts = {'center': new google.maps.LatLng(37.774514, -122.433414),
-        'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
-
-    var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
+        //map
+        var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
    
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-       if (map.getZoom() < minZoom) map.setZoom(minZoom);
-    });
+        //if zoom is less than specified, correct it
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+            if (map.getZoom() < minZoom) map.setZoom(minZoom);
+        });
 
-    google.maps.event.addListener(map, 'dragend', function() {
-     if (strictBounds.contains(map.getCenter())) return;
+        //if map is dragged out of bounds, reposition it
+        google.maps.event.addListener(map, 'dragend', function() {
+            if (strictBounds.contains(map.getCenter())) return;
 
-     // We're out of bounds - Move the map back within the bounds
 
-     var c = map.getCenter(),
-         x = c.lng(),
-         y = c.lat(),
-         maxX = strictBounds.getNorthEast().lng(),
-         maxY = strictBounds.getNorthEast().lat(),
-         minX = strictBounds.getSouthWest().lng(),
-         minY = strictBounds.getSouthWest().lat();
+            var c = map.getCenter(),
+                x = c.lng(),
+                y = c.lat(),
+                maxX = strictBounds.getNorthEast().lng(),
+                maxY = strictBounds.getNorthEast().lat(),
+                minX = strictBounds.getSouthWest().lng(),
+                minY = strictBounds.getSouthWest().lat();
 
-     if (x < minX) x = minX;
-     if (x > maxX) x = maxX;
-     if (y < minY) y = minY;
-     if (y > maxY) y = maxY;
+            if (x < minX) x = minX;
+            if (x > maxX) x = maxX;
+            if (y < minY) y = minY;
+            if (y > maxY) y = maxY;
 
-     map.setCenter(new google.maps.LatLng(y, x));
-   });
+            map.setCenter(new google.maps.LatLng(y, x));
+        });
 
-   google.maps.event.addListener(map,'mousemove',function(event) {
-	if(moveEvents < 30){
-		moveEvents++;
-	}else{
-		moveEvents = 0;
+        //if the mouse moves 30 times, pull new data
+        google.maps.event.addListener(map,'mousemove',function(event) {
+            if(moveEvents < 30){
+                moveEvents++;
+            }else{
+                moveEvents = 0;
                 $.ajax({
                     type: "GET",
                     url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+event.latLng.lat()+","+event.latLng.lng()+"&sensor=true",
                     dataType: "json",
                     success: function(json) {
-			try{
-                        matches = fuzzy.get(json.results[0].address_components[2].long_name);
-                        $('#avgRent').text("Average Rent: $"+ region_array[matches[0][1]]['avg_rent']);
-                       var rating = region_array[matches[0][1]]['star_level'];
+                        try{
+                            matches = fuzzy.get(json.results[0].address_components[2].long_name);
+                            $('#avgRent').text("Average Rent: $"+ region_array[matches[0][1]]['avg_rent']);
+                            var rating = region_array[matches[0][1]]['star_level'];
                        
-            
-            for (var i=1; i<=rating; i++) {
-                $('#' + i.toString() + 'Star').show();
-            }
-            for (var j=i; j<=5; j++) {
-                $('#' + j.toString() + 'Star').hide();
-            }
+                            for (var i=1; i<=rating; i++) {
+                                $('#' + i.toString() + 'Star').show();
+                            }
+                            for (var j=i; j<=5; j++) {
+                                $('#' + j.toString() + 'Star').hide();
+                            }
 
-			$('#locName').text(json.results[0].address_components[2].long_name + " Neighborhood");
+                            $('#locName').text(json.results[0].address_components[2].long_name + " Neighborhood");
+                        }
+                        catch(e){
+                            console.log(e);
+                        }
                     }
-			catch(e){
-			console.log(e);
-			}
-		  }
                 });
-		}
+            }
         });
-}
+    }
 
-function jsonParser(json) {
-    console.log(json.results[0].address_components[2].long_name);
-};
-google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {% endblock %}
