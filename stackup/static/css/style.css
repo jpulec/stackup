@@ -19,4 +19,38 @@
 
 body {
 	overflow-y:scroll;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+html { 
+    height: 100%
+}
+
+.container { 
+    height: 100%
+}
+
+/*home.html */
+.modal-content {
+    margin-top: 30%;
+}
+
+.modal-title {
+    font-size: 22pt;
+    text-align: center;
+}
+
+.modal-content #id_salary { 
+    width: 230px;
+}
+
+/*salary.html */
+#map-canvas { 
+    height: 100% 
+}
+
+#map-container {
+    height: 95% 
 }
