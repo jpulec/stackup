@@ -84,6 +84,24 @@ function initialize() {
 
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
     google.maps.event.addListener(map,'click',function(event) {
+<<<<<<< HEAD
+       console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
+    google.maps.event.addListener(map,'mousemove',function(event) {
+	var lat = event.latLng.lat();
+	var lng = event.latLng.lng();
+	document.getElementById('latspan').innerHTML = lat
+	document.getElementById('lngspan').innerHTML = lng
+	console.log("Lng: " + lng);
+	console.log("Lat: " + lat);
+	
+	$.ajax({
+        type: "GET",
+        url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true",
+        dataType: "json",
+        success: jsonParser
+    });
+    });
+=======
             console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
         google.maps.event.addListener(map,'mousemove',function(event) {
                 document.getElementById('latspan').innerHTML = event.latLng.lat()
@@ -112,7 +130,12 @@ console.log('There was an error loading the data.');
 }           
 });
 });
+>>>>>>> eeac77434ed6899aa683e9b2f36e1e560f337ca7
 }
+
+function jsonParser(json) {
+        console.log(json.results[0].address_components[2].long_name);
+    };
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {% endblock %}
