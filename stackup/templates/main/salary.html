@@ -84,20 +84,18 @@ function initialize() {
 
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
     google.maps.event.addListener(map,'click',function(event) {
-            console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng());
         google.maps.event.addListener(map,'mousemove',function(event) {
                 document.getElementById('latspan').innerHTML = event.latLng.lat()
                 document.getElementById('lngspan').innerHTML = event.latLng.lng()
 
-                var neighborhood;
-                matches = fuzzy.get(neighborhood);
-                console.log("Lng: " + event.latLng.lng());
-                console.log("Lat: " + event.latLng.lat());
                 $.ajax({
                     type: "GET",
-                    url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true",
+                    url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+event.latLng.lat()+","+event.latLng.lng()+"&sensor=true",
                     dataType: "json",
-                    success: jsonParser
+                    success: function(json) {
+                        matches = fuzzy.get(json.results[0].address_components[2].long_name);
+                        console.log(region_array[matches[0][1]]);
+                    }
                 });
         });
 
