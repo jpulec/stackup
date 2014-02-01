@@ -67,8 +67,9 @@ function GetUrlValue(VarSearch){
 var initialLocation;
 
 function initialize() {
-  var opts = {'center': new google.maps.LatLng(37.77295, -122.44122),
-    'zoom':11, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
+  var opts = {'center': new google.maps.LatLng(37.774514, -122.433414),
+    'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
+
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
     google.maps.event.addListener(map,'click',function(event) {
        console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
