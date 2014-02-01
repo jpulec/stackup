@@ -84,7 +84,7 @@ function initialize() {
 
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
     google.maps.event.addListener(map,'click',function(event) {
-            console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
+            console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng());
         google.maps.event.addListener(map,'mousemove',function(event) {
                 document.getElementById('latspan').innerHTML = event.latLng.lat()
                 document.getElementById('lngspan').innerHTML = event.latLng.lng()
@@ -94,12 +94,12 @@ function initialize() {
                 console.log("Lng: " + event.latLng.lng());
                 console.log("Lat: " + event.latLng.lat());
                 $.ajax({
-type: "GET",
-url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true",
-dataType: "json",
-success: jsonParser
-});
+                    type: "GET",
+                    url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true",
+                    dataType: "json",
+                    success: jsonParser
                 });
+        });
 
 });
 }
