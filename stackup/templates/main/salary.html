@@ -33,7 +33,7 @@
 {% block body %}
     <div id="map-container">
 	<div id="info">
-		<span id="rating">
+		<span id="rating">Standard of Living
 		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="oneStar" class="star"/>
 		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="twoStar" class="star"/>
 		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="threeStar" class="star"/>
@@ -43,7 +43,7 @@
 		<br />
 		<span id="locName"></span>
 		<br />
-		<span id="avgRent">$</span>
+		<span id="avgRent"></span>
 		<br />
 		<span id="walkScore"></span>
         </div>
@@ -93,8 +93,9 @@ function initialize() {
                     url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+event.latLng.lat()+","+event.latLng.lng()+"&sensor=true",
                     dataType: "json",
                     success: function(json) {
+			try{
                         matches = fuzzy.get(json.results[0].address_components[2].long_name);
-                        $('#avgRent').text(region_array[matches[0][1]]['avg_rent']);
+                        $('#avgRent').text("Average Rent: $"+ region_array[matches[0][1]]['avg_rent']);
                        var rating = region_array[matches[0][1]]['star_level'];
 			if(rating == 1){
 			  $('#oneStar').show();
@@ -127,8 +128,12 @@ function initialize() {
                           $('#fourStar').show();
                           $('#fiveStar').show();
 			}
-			$('#locName').text(json.results[0].address_components[2].long_name);
+			$('#locName').text(json.results[0].address_components[2].long_name + " Neighborhood");
                     }
+			catch(e){
+			//console.log(e);
+			}
+		  }
                 });
         });
 }
