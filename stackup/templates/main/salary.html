@@ -74,30 +74,25 @@ function initialize() {
     google.maps.event.addListener(map,'click',function(event) {
        console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
     google.maps.event.addListener(map,'mousemove',function(event) {
-	document.getElementById('latspan').innerHTML = event.latLng.lat()
-	document.getElementById('lngspan').innerHTML = event.latLng.lng()
-	console.log("Lng: " + event.latLng.lng());
-	console.log("Lat: " + event.latLng.lat());
-
+	var lat = event.latLng.lat();
+	var lng = event.latLng.lng();
+	document.getElementById('latspan').innerHTML = lat
+	document.getElementById('lngspan').innerHTML = lng
+	console.log("Lng: " + lng);
+	console.log("Lat: " + lat);
+	
 	$.ajax({
-                // set up an ajax post request
-                url: '/salary/',
-                type: 'POST',
-                data: { salary: GetUrlValue('salary'), lat: event.latLng.lat(), lng: event.latLng.lng() },
-
-                success: function (response) {
-		     document.getElementById('locName').innerHTML = response[0].locName;
-		    document.getElementById('rating').innerHTML = response[0].rating;
-	  	     document.getElementById('avgRent').innerHTML = response[0].avgRent;
-		     document.getElementById('walkScore').innerHTML = response[0].walkScore;
-		    
-	    },
-		error: function(){
-                console.log('There was an error loading the data.');
-}           
- });
+        type: "GET",
+        url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true",
+        dataType: "json",
+        success: jsonParser
+    });
     });
 }
+
+function jsonParser(json) {
+        console.log(json.results[0].address_components[2].long_name);
+    };
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {% endblock %}
