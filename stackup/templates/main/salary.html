@@ -74,7 +74,8 @@ function initialize() {
         'name': '{{ standard.region.name }}',
         'avg_rent': '{{ standard.region.cl_rent }}',
         'star_level':'{{ standard.star_level }}',
-        'threshold': '{{ standard.threshold }}'
+        'threshold': '{{ standard.threshold }}',
+        'crime_score': '{{ standard.region.crime_score }}'
     };
     fuzzy_strings.push("{{ standard.region.name }}");
     {% endfor %}

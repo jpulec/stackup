@@ -1,19 +1,74 @@
 import requests
 import xml.etree.ElementTree as ET
 import datetime
+import json
+import fuzzyset
+from fuzzywuzzy import process
 from bs4 import BeautifulSoup
 from django.conf import settings
 
-from stackup.apps.main.models import Region, StandardOfLiving
+from stackup.apps.main.models import Region, StandardOfLiving, Geocode
 
 def calculate_standards():
     for region in Region.objects.all():
         if region.cl_rent:
             year_rent = region.cl_rent * 12
             for star in range(5):
+                if region.crime_score > (5 - star) * 20 and star != 0:
+                    try:
+                        StandardOfLiving.objects.get(region=region, star_level=star+1).delete()
+                    except StandardOfLiving.DoesNotExist as e:
+                        print e
+                    continue
                 standard, created = StandardOfLiving.objects.get_or_create(region=region, star_level=star+1, defaults={'threshold' : year_rent + (star + 1) * region.star_difference})
                 standard.threshold = year_rent + (star + 1) * region.star_difference
                 standard.save()
+
+def calculate_crime_score():
+    url = "http://sanfrancisco.crimespotting.org/crime-data?format=json&count=10000"
+    r = requests.get(url)
+    data = r.json()
+    regions = {}
+    for crime in data['features']:
+        neighborhood = None
+        try:
+            neighborhood = Geocode.objects.get(lat=crime['geometry']['coordinates'][1], lng=crime['geometry']['coordinates'][0]).neighborhood
+        except Geocode.DoesNotExist as e:
+            print e
+            geocode_url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&sensor=true" % (crime['geometry']['coordinates'][1], crime['geometry']['coordinates'][0]) 
+            r = requests.get(geocode_url)
+            geo_data = r.json()
+            try:
+                neighborhood = geo_data['results'][0]['address_components'][2]['long_name']
+                Geocode.objects.create(lat=crime['geometry']['coordinates'][1], lng=crime['geometry']['coordinates'][0], neighborhood=neighborhood)
+            except Exception as e:
+                print e
+                continue
+        if neighborhood  not in regions:
+            regions[neighborhood] = 0
+        crime_type = crime['properties']['crime_type']
+        if crime_type == 'ROBBERY' or crime_type == 'VEHICLE THEFT' or crime_type == "THEFT" or crime_type == "BURGLARY":
+            regions[neighborhood] += 5
+        elif crime_type == "NARCOTICS":
+            regions[neighborhood] += 3
+        elif crime_type == "SIMPLE ASSAULT":
+            regions[neighborhood] += 10
+        elif crime_type == "ALCOHOL":
+            regions[neighborhood] += 2
+        elif crime_type == "VANDALISM":
+            regions[neighborhood] += 1
+        else:
+            print crime_type
+    fuzzy = [ region.name for region in Region.objects.all() ]
+    for k, v in regions.iteritems():
+        match = process.extractOne(k.replace("District", "").replace("The", ""), fuzzy)
+        if match[1] > 79:
+            print k + ":" + unicode(match)
+            region = Region.objects.get(name=match[0])
+            region.crime_score = v
+            region.save()
+
+
 
 
 def scrape_craigslist_neighborhoods():

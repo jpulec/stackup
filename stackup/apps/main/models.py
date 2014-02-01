@@ -4,6 +4,7 @@ class Region(models.Model):
     name = models.CharField(max_length=256)
     cl_id = models.IntegerField()
     cl_rent = models.IntegerField(null=True)
+    crime_score = models.IntegerField(null=True)
     star_difference = models.IntegerField(null=True)
 
     def __unicode__(self):
@@ -16,3 +17,8 @@ class StandardOfLiving(models.Model):
 
     def __unicode__(self):
         return unicode(self.region) + ":" + unicode(self.star_level) + ":" + unicode(self.threshold)
+
+class Geocode(models.Model):
+    neighborhood = models.CharField(max_length=256)
+    lat = models.FloatField()
+    lng = models.FloatField()

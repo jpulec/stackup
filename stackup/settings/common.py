@@ -133,4 +133,4 @@ LOGGING = {
     }
 }
 
-TRULIA_API = "t546hw65njt8nsqtxnymng3n"
+GOOGLE_KEY = "AIzaSyBtjo0LUoozL6LlvBy8lp-Gp7PElI4T_1M"
