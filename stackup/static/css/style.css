@@ -60,6 +60,7 @@ html {
 #map-container {
     height: 95%;
     position: relative;
+    top:52px;
 }
 
 #info {
