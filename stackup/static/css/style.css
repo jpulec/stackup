@@ -64,6 +64,7 @@ html {
 
 #info {
     position:absolute;
+    width: 150px;
     top:50px;
     right: 0px;
     z-index:1;
