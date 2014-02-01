@@ -3,9 +3,10 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.db.models import Max, Q
 
 from stackup.apps.main.forms import SalaryForm
-from stackup.apps.main.models import Region
+from stackup.apps.main.models import Region, StandardOfLiving
 
 class Home(FormView):
     template_name = "main/home.html"
@@ -15,7 +16,6 @@ class About(TemplateView):
     template_name = "main/about.html"
 
 class Salary(ListView):
-    model = Region
     context_object_name = "regions"
     template_name = "main/salary.html"
 
@@ -26,3 +26,11 @@ class Salary(ListView):
             return HttpResponseRedirect(reverse("home"))
         return super(Salary, self).get(request, *args, **kwargs)
 
+    def get_queryset(self):
+        model_max_set = StandardOfLiving.objects.filter(threshold__lte=self.request.GET['salary']).values('region').annotate(max_star_level=Max('star_level')).order_by()
+
+        q_statement = Q()
+        for pair in model_max_set:
+            q_statement |= (Q(region__exact=pair['region']) & Q(star_level=pair['max_star_level']))
+        model_set = StandardOfLiving.objects.filter(q_statement)
+        return model_set
