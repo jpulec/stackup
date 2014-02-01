@@ -36,9 +36,14 @@ html {
 .modal-content {
     margin-top: 30%;
 }
+
 .modal-title {
     font-size: 22pt;
     text-align: center;
+}
+
+.modal-content #id_salary { 
+    width: 230px;
 }
 
 /*salary.html */
