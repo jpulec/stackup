@@ -12,7 +12,7 @@
                 <h4 class="modal-title">StackUp</h4>
             </div>
             <div class="modal-body">
-                <form method="get" action="{% url "salary" %}">
+                <form method="get" name="submit_form" onsubmit="return validateForm()" action="{% url "salary" %}">
                     {{ form.as_p }}
                     <input type="submit" class="btn btn-primary"></input>
                 </form>
@@ -29,6 +29,19 @@ $(".modal").modal({
         show: true,
         backdrop: "static",
         });
+        
+function validateForm() {
+    var x=document.forms["submit_form"]["id_salary"].value;
+    if (!isNumber(x)) {
+        alert("Please enter a numerical salary");
+        $('#id_salary').val("");
+        return false;
+    }
+}
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
 </script>
 
 {% endblock %}
