@@ -1,25 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 
+{% block header %}
+<style type="text/css">
+    html { height: 100% }
+    body { height: 100%; margin: 0; padding: 0 }
+    .container { height: 100% }
+    #map-canvas { height: 100% }
+    #map-container { height: 100% }
+</style>
+{% endblock %}
+
 {% block body %}
-    <div id="map">
+    <div id="map-container">
+        <div id="map-canvas">
+        </div>
     </div>
-    <h1>StackUp</h1>
 {% endblock body %}
 
 {% block script %}
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaLOIWJwRzsQWsWBrfdRA4C5XRnzenh5s&sensor=true"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtjo0LUoozL6LlvBy8lp-Gp7PElI4T_1M&sensor=true"></script>
 
 <script type="text/javascript">
 var initialLocation;
 
 function initialize() {
     var mapOptions = {
-    center: new google.maps.LatLng(43.0, -89.0),
-        zoom: 16,
+    center: new google.maps.LatLng(-34.397, 150.644),
+        zoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("map"),
+    var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 }
 
