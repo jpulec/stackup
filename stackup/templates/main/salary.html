@@ -34,11 +34,11 @@
     <div id="map-container">
 	<div id="info">
 		<span id="rating">Standard of Living:
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="oneStar" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="twoStar" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="threeStar" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="fourStar" class="star"/>
-		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="fiveStar" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="1Star" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="2Star" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="3Star" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="4Star" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="5Star" class="star"/>
 		</span>
 		<br />
 		<span id="locName"></span>
@@ -129,37 +129,15 @@ function initialize() {
                         matches = fuzzy.get(json.results[0].address_components[2].long_name);
                         $('#avgRent').text("Average Rent: $"+ region_array[matches[0][1]]['avg_rent']);
                        var rating = region_array[matches[0][1]]['star_level'];
-			if(rating == 1){
-			  $('#oneStar').show();
-			  $('#twoStar').hide();
-			  $('#threeStar').hide();
-			  $('#fourStar').hide();
-			  $('#fiveStar').hide();
-			}else if(rating == 2){
-			  $('#oneStar').show();
-                          $('#twoStar').show();
-                          $('#threeStar').hide();
-                          $('#fourStar').hide();
-                          $('#fiveStar').hide();
-			}else if(rating == 3){
-			  $('#oneStar').show();
-                          $('#twoStar').show();
-                          $('#threeStar').show();
-                          $('#fourStar').hide();
-                          $('#fiveStar').hide();
-			}else if(rating == 4){
-			  $('#oneStar').show();
-                          $('#twoStar').show();
-                          $('#threeStar').show();
-                          $('#fourStar').show();
-                          $('#fiveStar').hide();
-			}else if(rating == 5){
-			  $('#oneStar').show();
-                          $('#twoStar').show();
-                          $('#threeStar').show();
-                          $('#fourStar').show();
-                          $('#fiveStar').show();
-			}
+                       
+            
+            for (var i=1; i<=rating; i++) {
+                $('#' + i.toString() + 'Star').show();
+            }
+            for (var j=i; j<=5; j++) {
+                $('#' + j.toString() + 'Star').hide();
+            }
+
 			$('#locName').text(json.results[0].address_components[2].long_name + " Neighborhood");
                     }
 			catch(e){
