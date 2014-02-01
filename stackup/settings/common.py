@@ -53,7 +53,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 41ty-h72@rqdgbu--*zvtfk7j+w%1q8_=c2a(_f_%v&*l+k8f-
+SECRET_KEY = "41ty-h72@rqdgbu--*zvtfk7j+w%1q8_=c2a(_f_%v&*l+k8f-"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
+    'stackup.apps.main',
 )
 
 # A sample logging configuration. The only tangible logging

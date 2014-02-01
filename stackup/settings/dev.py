@@ -22,9 +22,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware','django_pdb.middleware.PdbMiddleware',)
+MIDDLEWARE_CLASSES += ('django_pdb.middleware.PdbMiddleware',)
 
-INSTALLED_APPS += ('debug_toolbar','django_pdb')
+INSTALLED_APPS += ('django_pdb',)
 
 TEMPLATE_CONTEXT_PROCESSORS += ( 'django.core.context_processors.debug',)
 
