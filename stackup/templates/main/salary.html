@@ -37,7 +37,13 @@
 		<br />
                 <span id="lngspan"></span>
 		<br />
-		<span id="rating"></span>
+		<span id="rating">
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="oneStar" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="twoStar" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="threeStar" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="fourStar" class="star"/>
+		<img src="http://www.freestockphotos.biz/pictures/15/15160/Illustration%2Bof%2Ba%2Bgold%2Bstar.png" id="fiveStar" class="star"/>
+		</span>
 		<br />
 		<span id="locName"></span>
 		<br />
@@ -85,11 +91,7 @@ function initialize() {
         'zoom':13, 'mapTypeId': google.maps.MapTypeId.ROADMAP }
 
     var map = new google.maps.Map(document.getElementById('map-canvas'),opts);
-    google.maps.event.addListener(map,'click',function(event) {
         google.maps.event.addListener(map,'mousemove',function(event) {
-                document.getElementById('latspan').innerHTML = event.latLng.lat()
-                document.getElementById('lngspan').innerHTML = event.latLng.lng()
-
                 $.ajax({
                     type: "GET",
                     url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+event.latLng.lat()+","+event.latLng.lng()+"&sensor=true",
@@ -97,12 +99,42 @@ function initialize() {
                     success: function(json) {
                         matches = fuzzy.get(json.results[0].address_components[2].long_name);
                         $('#avgRent').text(region_array[matches[0][1]]['avg_rent']);
-                        $('#rating').text(region_array[matches[0][1]]['star_level']);
+                       var rating = region_array[matches[0][1]]['star_level'];
+			if(rating == 1){
+			  $('#oneStar').show();
+			  $('#twoStar').hide();
+			  $('#threeStar').hide();
+			  $('#fourStar').hide();
+			  $('#fiveStar').hide();
+			}else if(rating == 2){
+			  $('#oneStar').show();
+                          $('#twoStar').show();
+                          $('#threeStar').hide();
+                          $('#fourStar').hide();
+                          $('#fiveStar').hide();
+			}else if(rating == 3){
+			  $('#oneStar').show();
+                          $('#twoStar').show();
+                          $('#threeStar').show();
+                          $('#fourStar').hide();
+                          $('#fiveStar').hide();
+			}else if(rating == 4){
+			  $('#oneStar').show();
+                          $('#twoStar').show();
+                          $('#threeStar').show();
+                          $('#fourStar').show();
+                          $('#fiveStar').hide();
+			}else if(rating == 5){
+			  $('#oneStar').show();
+                          $('#twoStar').show();
+                          $('#threeStar').show();
+                          $('#fourStar').show();
+                          $('#fiveStar').show();
+			}
+			$('#locName').text(json.results[0].address_components[2].long_name);
                     }
                 });
         });
-
-});
 }
 
 function jsonParser(json) {
