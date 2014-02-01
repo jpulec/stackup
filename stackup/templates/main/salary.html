@@ -55,17 +55,6 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtjo0LUoozL6LlvBy8lp-Gp7PElI4T_1M&sensor=true"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/fuzzyset.js"></script>
 <script type="text/javascript">
-function GetUrlValue(VarSearch){
-    var SearchString = window.location.search.substring(1);
-    var VariableArray = SearchString.split('&');
-    for(var i = 0; i < VariableArray.length; i++){
-        var KeyValuePair = VariableArray[i].split('=');
-        if(KeyValuePair[0] == VarSearch){
-            return KeyValuePair[1];
-        }
-    }
-}
-
 var initialLocation;
 
 function initialize() {
@@ -83,6 +72,7 @@ function initialize() {
     fuzzy = FuzzySet(fuzzy_strings);
 
     var minZoom = 12;
+    var moveEvents = 0;
 
     var strictBounds = new google.maps.LatLngBounds(
      new google.maps.LatLng(37.69, -122.545),
@@ -120,6 +110,10 @@ function initialize() {
    });
 
    google.maps.event.addListener(map,'mousemove',function(event) {
+	if(moveEvents < 30){
+		moveEvents++;
+	}else{
+		moveEvents = 0;
                 $.ajax({
                     type: "GET",
                     url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+event.latLng.lat()+","+event.latLng.lng()+"&sensor=true",
@@ -141,10 +135,11 @@ function initialize() {
 			$('#locName').text(json.results[0].address_components[2].long_name + " Neighborhood");
                     }
 			catch(e){
-			//console.log(e);
+			console.log(e);
 			}
 		  }
                 });
+		}
         });
 }
 
