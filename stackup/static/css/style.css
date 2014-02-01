@@ -50,6 +50,10 @@ html {
     width: 230px;
 }
 
+.btn-primary {
+    margin-left: 49px;
+}
+
 /*salary.html */
 #map-canvas { 
     height: 100%;
