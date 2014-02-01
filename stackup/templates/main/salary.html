@@ -74,7 +74,7 @@ function initialize() {
        console.log("Lat: " +  event.latLng.lat() + ", Lng: " + event.latLng.lng()) })
     google.maps.event.addListener(map,'mousemove',function(event) {
 	document.getElementById('latspan').innerHTML = event.latLng.lat()
-	document.getElementById('lngspan').innerHTML = event.latLng.lat()
+	document.getElementById('lngspan').innerHTML = event.latLng.lng()
 	console.log("Lng: " + event.latLng.lng());
 	console.log("Lat: " + event.latLng.lat());
 
