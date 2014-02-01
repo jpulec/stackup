@@ -13,7 +13,7 @@ class Salary(TemplateView):
     template_name = "main/salary.html"
 
     def get(self, request, *args, **kwargs):
-        if "salary" in self.request.GET and self.request.GET['salary']:
+        if "salary" in self.request.GET and self.request.GET['salary'] and self.request.GET['salary'] != "0":
             pass
         else:
             return HttpResponseRedirect(reverse("home"))
