@@ -19,6 +19,9 @@
             <li{% if selected == "home" %} class="active"{% endif %}>
                 <a href="{% url "home" %}">Home</a>
             </li>
+            <li{% if selected == "about" %} class="active"{% endif %}>
+                <a href="{% url "about" %}">About</a>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
